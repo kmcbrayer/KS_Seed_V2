@@ -1,0 +1,27 @@
+{
+  "name": "ks_seed",
+  "version": "0.0.1",
+  "dependencies": {
+    "handlebars": "^2.0.0-alpha.4",
+    "express": "~3.4.3",
+    "ejs": "~0.8.4"
+  },
+  "devDependencies": {
+    "connect-livereload": "~0.3.0",
+    "grunt": "~0.4.1",
+    "grunt-bower-install": "~0.7.0",
+    "grunt-contrib-watch": "~0.5.2",
+    "grunt-express-server": "~0.4.5",
+    "grunt-open": "~0.2.0",
+    "karma": "^0.12.17",
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "load-grunt-tasks": "~0.2.0"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}
