@@ -6,6 +6,16 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   grunt.initConfig({
+    'browserify': {
+      watchClient:{
+        src:['app/**/*.js'],
+        dest: 'app/bundle.js',
+        options: {
+          external: ['jquery'],
+          watch: true
+        }
+      }
+    },
     express: {
       options: {
         port: process.env.PORT || 9000
@@ -24,8 +34,7 @@ module.exports = function(grunt) {
     },
     watch: {
       js: {
-        files: ['app/**/*.js'],
-        tasks: ['newer:jshint:all'],
+        files: ['app/bundle.js'],
         options: {
           livereload: true
         }
@@ -73,11 +82,13 @@ module.exports = function(grunt) {
       }
     }
   });
+  grunt.registerTask('default', ['browserify:watchClient']);
   
   grunt.registerTask('serve', function (target) {
 
     grunt.task.run([
       'bower-install',
+      'browserify:watchClient',
       'express:dev',
       'open',
       'watch'
