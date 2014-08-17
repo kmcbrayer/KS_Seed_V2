@@ -8,7 +8,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     'browserify': {
       watchClient:{
-        src:['app/**/*.js'],
+        src:['app/js/*.js'],
         dest: 'app/bundle.js',
         options: {
           external: ['jquery'],

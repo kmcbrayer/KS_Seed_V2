@@ -1,6 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 //KISS == Keep It Simple Stupid
 'use strict';
+
+var tmpl = require('./tmplUtils');
 //Models
 exports.Model = function(attrs){
   var self = this;
@@ -17,7 +19,9 @@ exports.Model = function(attrs){
   self.set = function(attr_name, val){
     if (attr_name=="data"){self.data = val}
     else{self.data[attr_name] = val;}
-    if (self.view){self.view.load()}  
+    if (self.view){
+      self.view.load()
+    }  
   }
   return self;
 };
@@ -31,7 +35,9 @@ exports.View = function(attrs){
     self.model.view = self;
   }
   if (attrs.el){self.el = attrs.el}
-  if (attrs.template){self.template = attrs.template}
+  if (attrs.template){
+    self.template = tmpl.SetTemplate(attrs.template);
+  }
   if (attrs.events){
     self.events = attrs.events;
     $.each(self.events,function(e,fxn){
@@ -51,7 +57,7 @@ exports.View = function(attrs){
     var attrs = (attrs) ? attrs : {};
     // end hack
     var data = (attrs.data) ? attrs.data : self.model.data;
-    var source = (attrs.source) ? attrs.source : self.template.html();
+    var source = (attrs.source) ? attrs.source : tmpl.GetHTML(self.template);
     var template = Handlebars.compile(source);
     self.el.html(template(data));
   };
@@ -68,7 +74,7 @@ exports.View = function(attrs){
   self.load();
   return self;
 };
-},{}],2:[function(require,module,exports){
+},{"./tmplUtils":3}],2:[function(require,module,exports){
 'use strict';
 
 var ks = require('./kiss');
@@ -83,8 +89,10 @@ var tabModel = ks.Model({
 var tabView = ks.View({
 	model:tabModel,
 	el:$("#tabNav"),
-	template:$("#tabTemplate")
-})
+	template:'templates/tabTemplate.html'
+	// or 
+	//template:$("#tabTemplate")
+});
 
 tabView.addEvents({
 	"click": function(e){
@@ -123,4 +131,32 @@ var inputView = ks.View({
 	el:$("#inputForm"),
 	template:$("#inputTemplate"),
 });
-},{"./kiss":1}]},{},[1,2]);
+},{"./kiss":1}],3:[function(require,module,exports){
+'use strict';
+// This file will have functions for getting and manipulating templates
+
+exports.SetTemplate = function(template){
+	if(typeof(template)=== 'string') {
+		//if its a string we assume its a url, else it would be a Jquerry object
+		var obj = ''
+		$.ajax({
+			url: template,
+			async: false,
+			success : function(res) {
+				obj = res;
+			}
+		});
+		return obj;
+	} else {
+		return template;
+	}
+}
+
+exports.GetHTML = function(template){
+	if (typeof(template) === 'string') {
+		return template;
+	} else {
+		return template.html();
+	}
+}
+},{}]},{},[1,2]);

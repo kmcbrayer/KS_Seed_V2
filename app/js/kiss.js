@@ -1,5 +1,7 @@
 //KISS == Keep It Simple Stupid
 'use strict';
+
+var tmpl = require('./tmplUtils');
 //Models
 exports.Model = function(attrs){
   var self = this;
@@ -16,7 +18,9 @@ exports.Model = function(attrs){
   self.set = function(attr_name, val){
     if (attr_name=="data"){self.data = val}
     else{self.data[attr_name] = val;}
-    if (self.view){self.view.load()}  
+    if (self.view){
+      self.view.load()
+    }  
   }
   return self;
 };
@@ -30,7 +34,9 @@ exports.View = function(attrs){
     self.model.view = self;
   }
   if (attrs.el){self.el = attrs.el}
-  if (attrs.template){self.template = attrs.template}
+  if (attrs.template){
+    self.template = tmpl.SetTemplate(attrs.template);
+  }
   if (attrs.events){
     self.events = attrs.events;
     $.each(self.events,function(e,fxn){
@@ -50,7 +56,7 @@ exports.View = function(attrs){
     var attrs = (attrs) ? attrs : {};
     // end hack
     var data = (attrs.data) ? attrs.data : self.model.data;
-    var source = (attrs.source) ? attrs.source : self.template.html();
+    var source = (attrs.source) ? attrs.source : tmpl.GetHTML(self.template);
     var template = Handlebars.compile(source);
     self.el.html(template(data));
   };

@@ -12,8 +12,10 @@ var tabModel = ks.Model({
 var tabView = ks.View({
 	model:tabModel,
 	el:$("#tabNav"),
-	template:$("#tabTemplate")
-})
+	template:'templates/tabTemplate.html'
+	// or 
+	//template:$("#tabTemplate")
+});
 
 tabView.addEvents({
 	"click": function(e){
