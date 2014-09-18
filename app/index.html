@@ -21,45 +21,29 @@
     <!-- endbuild -->
   </head>
   <body>
-    <div id="inputForm">
-        <script type="text/template" id="inputTemplate">
-        <input data-bind="inputData" value={{inputData}} > <br />
-        {{inputData}}
-        </script>
-    </div>
+    <script src="three.min.js"></script>
+    <script src="bundle.js"></script>
+    <script>
 
-    <div id="tabNav">
-        <script type="text/template" id="tabTemplate">
-            {{#each this.tabList}}
-                <li class="nav">
-                    {{this}}
-                </li>
-            {{/each}}
-            current:{{this.current}}
-        </script>
-    </div>
+    var scene, camera, renderer;
+    var geometry, material, mesh;
 
-    <div id="divEl" >This div
-        <br />
-        
-        <script id="divTemplate" type="text/template">
-        <ul>
-            {{#each data.children}}
-                <a class="image_link" href="{{data.url}}">
-                  <img class="thumbs" src="{{data.thumbnail}}">
-                </a>
-                <div class="article_info">
-                  <a class="title_link" href="http://reddit.com{{data.permalink}}">
-                    {{this.data.title}}
-                  </a>
-                  <div class="sub_content">
-                    Author: {{data.author}} subreddit: {{data.subreddit}}
-                  </div>
-                </div>
-            {{/each}}
-        </ul>
-        </script>
-    </div>
+    SCENE.init();
+    animate();
+
+    function animate() {
+
+        requestAnimationFrame( animate );
+
+        mesh.rotation.x += 0.01;
+        mesh.rotation.y += 0.02;
+
+        SCENE.renderer.render( SCENE.scene, SCENE.camera );
+
+    }
+
+</script>
+    
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -76,7 +60,7 @@
     <script src="bower/bower_components/jquery/dist/jquery.js"></script>
     <script src="bower/bower_components/handlebars/handlebars.js"></script>
     <!-- endbower -->
-    <script src="bundle.js"></script>
+    
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->

@@ -1,56 +1,22 @@
 'use strict';
 
-var ks = require('./kiss');
+//var scene = require('scene');
 
-var tabModel = ks.Model({
-	data:{
-		tabList:["aww","javascript","pics"],
-		current:"aww"
-	}
-});
+window.SCENE = {VERSION: '0.1'};
 
-var tabView = ks.View({
-	model:tabModel,
-	el:$("#tabNav"),
-	template:'templates/tabTemplate.html'
-	// or 
-	//template:$("#tabTemplate")
-});
+SCENE.init = function() {
+  SCENE.scene = new THREE.Scene();
+  SCENE.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+  SCENE.camera.position.z = 1000;
 
-tabView.addEvents({
-	"click": function(e){
-		tabView.model.set("current",e.target.innerHTML)
-	}
-});
+  geometry = new THREE.BoxGeometry( 200, 200, 200 );
+  material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
 
-var myModel = ks.Model({
-	/*
-	data:{
-		name: "kevin",
-		spelling: "bad"
-	}
-	----or use url-----
-	*/
-	url:"http://www.reddit.com/r/aww/.json?jsonp=?"
-});
+  mesh = new THREE.Mesh( geometry, material );
+  SCENE.scene.add( mesh );
 
-var myView = ks.View({
-	model:myModel,
-	el:$('#divEl'),
-	template: $('#divTemplate'),
-	events:{
-		'click':function(){}
-	}
-});
+  SCENE.renderer = new THREE.CanvasRenderer();
+  SCENE.renderer.setSize( window.innerWidth, window.innerHeight );
 
-var inputModel = ks.Model({
-	data:{
-		inputData: "first_time"//cant be spaces for input fields??
-	}
-});
-
-var inputView = ks.View({
-	model:inputModel,
-	el:$("#inputForm"),
-	template:$("#inputTemplate"),
-});
+  document.body.appendChild( SCENE.renderer.domElement );
+}

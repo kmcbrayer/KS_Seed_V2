@@ -29,7 +29,7 @@ module.exports = function(grunt) {
     },
     open: {
       server: {
-        url: 'http://www.devsite.com:<%= express.options.port %>'
+        url: 'http://localhost:<%= express.options.port %>'
       }
     },
     watch: {
