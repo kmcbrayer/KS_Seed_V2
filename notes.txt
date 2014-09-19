@@ -1,3 +1,7 @@
-1. better 2 way data binding
-c-2. load handlebars templates
-3. get json from api in model
+1. lighting
+2. camera class
+  orbit camera
+3. character class
+4. box class
+5. make animation
+6. add physics

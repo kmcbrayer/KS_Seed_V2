@@ -1,0 +1,51 @@
+game defs:
+setup:
+  scene
+  camera (attached to character)
+  character
+  lighting
+
+class projeciton(v,d,s,m,to):
+  st = time_now()
+  et = st + to
+  v = velocity of projection
+  d = direction of projection
+  s = shape of projection
+  m = mass of 
+  to = timeout
+  def create_projection():
+
+
+  if (timer == et):
+    destroy()//probably just scene.subtract(this)
+
+var Action = function(args) {
+  var c = (args.center) ? args.center : 0;
+  var v = (args.velocity) ? args.velocity : 5;
+  var d = (args.direction) ? args.direction : new Vector3(0,0,1);
+  var s = (args.shape) ? args.shape : new Box(1,1,1);
+  var m = (args.mass) ? args.mass : 10; //? idk yet
+  var to = (args.timeout) ? args.timeout : 1000;//a second
+  var dt = (args.totalTime) ? args.totalTime : 1 second;
+  var vs = (args.startPoint) ? args.startPoint : c;
+  var va = (args.actionVector) ? args.actionVector : new Vector3(0,0,1);
+  var n = (args.numProjs) ? args.numProjs : 4;
+
+  var do_action = function(vs,va,n,dt) {
+    var st = Date.now();
+    var at = dt/n; // action time
+    var ats = [];
+    for (var i in n){
+      ats[i] = st+n*i+;
+    }
+    var et = st + dt;
+
+    var timer = new timer()
+
+    for (var i in ats):
+      setInterval(function() {
+        projection(v,d,s,m,to)
+      },
+      ats[i]//in milliseconds)
+  }
+}

@@ -1,11 +1,13 @@
 'use strict';
 
-//var scene = require('scene');
+var scene = require('scene');
 
 window.SCENE = {VERSION: '0.1'};
 
 SCENE.init = function() {
-  SCENE.scene = new THREE.Scene();
+  var geometry, material, mesh;
+
+  SCENE.scene = scene;
   SCENE.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
   SCENE.camera.position.z = 1000;
 
