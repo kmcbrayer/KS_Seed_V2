@@ -159,4 +159,4 @@ exports.GetHTML = function(template){
 		return template.html();
 	}
 }
-},{}]},{},[1,2]);
+},{}]},{},[1,2,3]);
