@@ -1,24 +1,29 @@
 'use strict';
 
-var scene = require('./scene.js');
+var sceneData = require('./scene.js');
 
-window.SCENE = {VERSION: '0.1'};
-
-SCENE.init = function() {
+sceneData.init = function() {
   var geometry, material, mesh;
 
-  SCENE.scene = new THREE.Scene();
-  SCENE.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-  SCENE.camera.position.z = 1000;
+  sceneData.scene = new THREE.Scene();
+  sceneData.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+  sceneData.camera.position.z = 1000;
 
   geometry = new THREE.BoxGeometry( 200, 200, 200 );
   material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
 
   mesh = new THREE.Mesh( geometry, material );
-  SCENE.scene.add( mesh );
+  sceneData.scene.add( mesh );
 
-  SCENE.renderer = new THREE.CanvasRenderer();
-  SCENE.renderer.setSize( window.innerWidth, window.innerHeight );
+  sceneData.renderer = new THREE.CanvasRenderer();
+  sceneData.renderer.setSize( window.innerWidth, window.innerHeight );
 
-  document.body.appendChild( SCENE.renderer.domElement );
+  document.body.appendChild( sceneData.renderer.domElement );
 };
+
+sceneData.animate = function() {
+  requestAnimationFrame( sceneData.animate );
+  sceneData.renderer.render( sceneData.scene, sceneData.camera );
+};
+
+window.SCENE = sceneData;

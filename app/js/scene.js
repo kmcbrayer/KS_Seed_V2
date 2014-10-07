@@ -1,5 +1,5 @@
 'use strict';
  
 module.exports = function() {
-  return new THREE.Scene();
+  return {VERSION: '0.1'};
 };

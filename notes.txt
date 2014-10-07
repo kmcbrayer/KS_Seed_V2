@@ -1,7 +1,6 @@
-1. lighting
-2. camera class
-  orbit camera
+1. research how to make javascript singleton
+2. setup singletons for scenedata, drawobjs, objprops,
+3. make instantiable service for each: box, line, plane, triangle, text. 
 3. character class
-4. box class
 5. make animation
 6. add physics
