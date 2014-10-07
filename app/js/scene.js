@@ -1,5 +1,3 @@
 'use strict';
  
-module.exports = function() {
-  return {VERSION: '0.1'};
-};
+module.exports = {VERSION: '0.1'};
