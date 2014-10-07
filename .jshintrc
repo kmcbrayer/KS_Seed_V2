@@ -22,6 +22,8 @@
     "after": false,
     "afterEach": false,
     "angular": false,
+    "SCENE": false,
+    "THREE": false,
     "before": false,
     "beforeEach": false,
     "browser": false,

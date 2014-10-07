@@ -2,4 +2,4 @@
  
 module.exports = function() {
   return new THREE.Scene();
-}
+};
