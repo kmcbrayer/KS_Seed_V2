@@ -1,4 +1,5 @@
-2. setup singletons for scenedata, drawobjs, objprops, boxProperties, lineProperties...
+2. setup singletons for scenedata, drawobjs, objprops, 
+  instantiate boxProperties, lineProperties... on creation ??
 3. make instantiable service for each: box, line, plane, triangle, text. 
   e.g module.exports = function() { return new THREE.BoxGe....}
 3. character class
