@@ -1,9 +1,10 @@
 'use strict';
 
-var boxProperties = require('./boxProperties.js');
+var boxProps = require('./boxProperties.js');
 
 module.exports = {
   newBox: function(props){
+    var boxProperties = new boxProps;
     for (var key in boxProperties){
       for (var k in props){
         if (k === key){

@@ -5,3 +5,9 @@
 3. character class
 5. make animation
 6. add physics
+
+
+start new project:
+1. KS_seed_V2 use as starting project. maybe make brand new repo
+2. features:
+  -dropdown panel for selecting objects

@@ -11,6 +11,8 @@ sceneData.init = function() {
   sceneData.camera.position.z = 10;
   sceneData.camera.position.y = 3;
   sceneData.controls = new THREE.OrbitControls(sceneData.camera,document.body);
+  //lights
+  sceneData.scene.fog = new THREE.Fog( 0xffffff, 2000, 10000 );
 
   drawObjs.init({type:"Box"});
   drawObjs.init({type:"Line"});
@@ -22,6 +24,7 @@ sceneData.init = function() {
   }});
 
   sceneData.renderer = new THREE.CanvasRenderer();
+  sceneData.renderer.setClearColor( sceneData.scene.fog.color, 1 );
   sceneData.renderer.setSize( window.innerWidth, window.innerHeight );
 
   console.log(drawObjs.objs);

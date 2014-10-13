@@ -1,22 +1,27 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-module.exports = {
-      'x': 0,
-      'y': 0,
-      'z': 0,
-      'height':1,
-      'width':1,
-      'depth':1,
-      'color': 0x991D4F
-    }
+function Obj() {
+  return {
+    'x': 0,
+    'y': 0,
+    'z': 0,
+    'height':1,
+    'width':1,
+    'depth':1,
+    'color': 0x991D4F
+  }
+}
+
+module.exports = Obj;
 },{}],2:[function(require,module,exports){
 'use strict';
 
-var boxProperties = require('./boxProperties.js');
+var boxProps = require('./boxProperties.js');
 
 module.exports = {
   newBox: function(props){
+    var boxProperties = new boxProps;
     for (var key in boxProperties){
       for (var k in props){
         if (k === key){
@@ -62,28 +67,28 @@ module.exports = {
 },{"./boxService.js":2,"./lineService.js":5}],4:[function(require,module,exports){
 'use strict';
 
-module.exports = {
-  init: function(){
-      return {
-        'x1':-10,
-        'y1':0,
-        'z1':0,
-        'x2':10,
-        'y2':0,
-        'z2':0,
-        'color': "0xCCCCCC"
-      }
+function Obj() {
+  return {
+    'x1':-10,
+    'y1':0,
+    'z1':0,
+    'x2':10,
+    'y2':0,
+    'z2':0,
+    'color': "CCCCCC"
   }
 }
+
+module.exports = Obj;
 },{}],5:[function(require,module,exports){
 'use strict';
 
-var lineProperties = require("./lineProperties.js");
+var lineProps = require("./lineProperties.js");
 
 module.exports = {
   newLine: function(props){
-    console.log(lineProperties.init())
-    lineProperties = lineProperties.init();
+    var lineProperties = new lineProps;
+    console.log(lineProperties)
     for (var key in lineProperties){
       for (var k in props){
         if (k === key){
@@ -92,7 +97,9 @@ module.exports = {
       }
     }
     
-    var material = new THREE.LineBasicMaterial();
+    var material = new THREE.LineBasicMaterial({
+      'color' : lineProperties.color
+    });
     var geometry = new THREE.Geometry();
     geometry.vertices.push( new THREE.Vector3( lineProperties.x1, lineProperties.y1, lineProperties.z1) );
     geometry.vertices.push( new THREE.Vector3( lineProperties.x2, lineProperties.y2, lineProperties.z2) );
@@ -114,6 +121,8 @@ sceneData.init = function() {
   sceneData.camera.position.z = 10;
   sceneData.camera.position.y = 3;
   sceneData.controls = new THREE.OrbitControls(sceneData.camera,document.body);
+  //lights
+  sceneData.scene.fog = new THREE.Fog( 0xffffff, 2000, 10000 );
 
   drawObjs.init({type:"Box"});
   drawObjs.init({type:"Line"});
@@ -125,6 +134,7 @@ sceneData.init = function() {
   }});
 
   sceneData.renderer = new THREE.CanvasRenderer();
+  sceneData.renderer.setClearColor( sceneData.scene.fog.color, 1 );
   sceneData.renderer.setSize( window.innerWidth, window.innerHeight );
 
   console.log(drawObjs.objs);
