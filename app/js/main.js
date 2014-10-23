@@ -2,43 +2,40 @@
 
 var sceneData = require('./scene.js');
 var drawObjs = require('./drawobjs.js');
+var KS = require('./KS.js');
 
 sceneData.init = function() {
-  var geometry, material, mesh;
+  
+  //worker scripts
+  Physijs.scripts.worker = 'physijs_worker.js';
+  Physijs.scripts.ammo = 'ammo.js';
+  //renderer init
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.shadowMapEnabled = true;
+  renderer.shadowMapSoft = true;
+  document.body.appendChild( renderer.domElement );
 
-  sceneData.scene = new THREE.Scene();
-  sceneData.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-  sceneData.camera.position.z = 10;
-  sceneData.camera.position.y = 3;
-  sceneData.controls = new THREE.OrbitControls(sceneData.camera,document.body);
-  //lights
-  sceneData.scene.fog = new THREE.Fog( 0xffffff, 2000, 10000 );
+  //scene init
+  var scene = new Physijs.Scene();
+  var camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 1000 );
+  KS.init(scene,camera);
+  //--------PUT OBJS HERE -------------------
 
-  drawObjs.init({type:"Box"});
-  drawObjs.init({type:"Line"});
-  drawObjs.init({type:"Line",props:{
-    "x1":0,"y1":-10,"x2":0,"y2":10
-  }});
-  drawObjs.init({type:"Line",props:{
-    "x1":0,"z1":-10,"x2":0,"z2":10
-  }});
+  KS.ground(); 
 
-  sceneData.renderer = new THREE.CanvasRenderer();
-  sceneData.renderer.setClearColor( sceneData.scene.fog.color, 1 );
-  sceneData.renderer.setSize( window.innerWidth, window.innerHeight );
 
-  console.log(drawObjs.objs);
+
+  //--------SCENE RENDERING HERE ------------
   for (var obj in drawObjs.objs){
-    sceneData.scene.add(drawObjs.objs[obj]);
+    scene.add(drawObjs.objs[obj]);
   }
-
-  document.body.appendChild( sceneData.renderer.domElement );
-};
-
-sceneData.animate = function() {
-  requestAnimationFrame( sceneData.animate );
-
-  sceneData.renderer.render( sceneData.scene, sceneData.camera );
+  function render() {
+    requestAnimationFrame( render );
+    renderer.render( scene, camera );
+  }
+  requestAnimationFrame( render );
+  scene.simulate();
 };
 
 window.SCENE = sceneData;

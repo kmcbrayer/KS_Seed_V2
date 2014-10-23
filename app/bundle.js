@@ -1,6 +1,58 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+var drawObjs = require('./drawobjs.js');
+
+module.exports = {
+	ground: function(props){
+		var ground_material = Physijs.createMaterial(
+			new THREE.MeshLambertMaterial({
+				'color': 0x991D4F
+				}),
+			.8, // high friction
+			.3 // low restitution
+		);
+		var ground = new Physijs.BoxMesh(
+			new THREE.BoxGeometry(100, 1, 100),
+			ground_material,
+			0 // mass
+		);
+		ground.receiveShadow = true;
+		drawObjs.objs.push( ground );
+	},
+	init: function(scene,camera){
+		scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
+	  scene.addEventListener(
+	      'update',
+	      function() {
+	        scene.simulate( undefined, 1 );
+	      }
+	    );
+
+	  camera.position.set( 100, 100, -100 );
+	  camera.lookAt( scene.position );//is at (0,0,0) 
+
+	  //controls
+	  var controls = new THREE.OrbitControls(camera,document.body);
+
+	  //lights
+	  var ambientLight = new THREE.AmbientLight( 0x101010 );
+	  scene.add( ambientLight );
+
+	  var light = new THREE.DirectionalLight( 0xFFFFFF );
+	  light.position.set( 200, 400, -150 );
+	  light.target.position.copy( scene.position );
+	  light.castShadow = true;
+	  
+	  light.shadowBias = -.0001
+	  light.shadowMapWidth = light.shadowMapHeight = 2048;
+	  light.shadowDarkness = .7;
+	  scene.add( light );
+	}
+}
+},{"./drawobjs.js":4}],2:[function(require,module,exports){
+'use strict';
+
 function Obj() {
   return {
     'x': 0,
@@ -14,7 +66,7 @@ function Obj() {
 }
 
 module.exports = Obj;
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 var boxProps = require('./boxProperties.js');
@@ -30,7 +82,7 @@ module.exports = {
       }
     }
     var geometry = new THREE.BoxGeometry(boxProperties.width,boxProperties.height,boxProperties.depth);
-    var material = new THREE.MeshBasicMaterial({
+    var material = new THREE.MeshLambertMaterial({
         'color' : boxProperties.color
       });
     var cube = new THREE.Mesh( geometry, material );
@@ -38,7 +90,7 @@ module.exports = {
     return cube;
   }
 }
-},{"./boxProperties.js":1}],3:[function(require,module,exports){
+},{"./boxProperties.js":2}],4:[function(require,module,exports){
 'use strict';
 
 var boxService = require('./boxService.js');
@@ -64,7 +116,7 @@ module.exports = {
       }
   }
 }
-},{"./boxService.js":2,"./lineService.js":5}],4:[function(require,module,exports){
+},{"./boxService.js":3,"./lineService.js":6}],5:[function(require,module,exports){
 'use strict';
 
 function Obj() {
@@ -80,7 +132,7 @@ function Obj() {
 }
 
 module.exports = Obj;
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 var lineProps = require("./lineProperties.js");
@@ -88,7 +140,6 @@ var lineProps = require("./lineProperties.js");
 module.exports = {
   newLine: function(props){
     var lineProperties = new lineProps;
-    console.log(lineProperties)
     for (var key in lineProperties){
       for (var k in props){
         if (k === key){
@@ -107,53 +158,50 @@ module.exports = {
     return new THREE.Line( geometry, material );
   }
 }
-},{"./lineProperties.js":4}],6:[function(require,module,exports){
+},{"./lineProperties.js":5}],7:[function(require,module,exports){
 'use strict';
 
 var sceneData = require('./scene.js');
 var drawObjs = require('./drawobjs.js');
+var KS = require('./KS.js');
 
 sceneData.init = function() {
-  var geometry, material, mesh;
+  
+  //worker scripts
+  Physijs.scripts.worker = 'physijs_worker.js';
+  Physijs.scripts.ammo = 'ammo.js';
+  //renderer init
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.shadowMapEnabled = true;
+  renderer.shadowMapSoft = true;
+  document.body.appendChild( renderer.domElement );
 
-  sceneData.scene = new THREE.Scene();
-  sceneData.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-  sceneData.camera.position.z = 10;
-  sceneData.camera.position.y = 3;
-  sceneData.controls = new THREE.OrbitControls(sceneData.camera,document.body);
-  //lights
-  sceneData.scene.fog = new THREE.Fog( 0xffffff, 2000, 10000 );
+  //scene init
+  var scene = new Physijs.Scene();
+  var camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 1000 );
+  KS.init(scene,camera);
+  //--------PUT OBJS HERE -------------------
 
-  drawObjs.init({type:"Box"});
-  drawObjs.init({type:"Line"});
-  drawObjs.init({type:"Line",props:{
-    "x1":0,"y1":-10,"x2":0,"y2":10
-  }});
-  drawObjs.init({type:"Line",props:{
-    "x1":0,"z1":-10,"x2":0,"z2":10
-  }});
+  KS.ground(); 
 
-  sceneData.renderer = new THREE.CanvasRenderer();
-  sceneData.renderer.setClearColor( sceneData.scene.fog.color, 1 );
-  sceneData.renderer.setSize( window.innerWidth, window.innerHeight );
 
-  console.log(drawObjs.objs);
+
+  //--------SCENE RENDERING HERE ------------
   for (var obj in drawObjs.objs){
-    sceneData.scene.add(drawObjs.objs[obj]);
+    scene.add(drawObjs.objs[obj]);
   }
-
-  document.body.appendChild( sceneData.renderer.domElement );
-};
-
-sceneData.animate = function() {
-  requestAnimationFrame( sceneData.animate );
-
-  sceneData.renderer.render( sceneData.scene, sceneData.camera );
+  function render() {
+    requestAnimationFrame( render );
+    renderer.render( scene, camera );
+  }
+  requestAnimationFrame( render );
+  scene.simulate();
 };
 
 window.SCENE = sceneData;
-},{"./drawobjs.js":3,"./scene.js":7}],7:[function(require,module,exports){
+},{"./KS.js":1,"./drawobjs.js":4,"./scene.js":8}],8:[function(require,module,exports){
 'use strict';
  
 module.exports = {VERSION: '0.1'};
-},{}]},{},[1,2,3,4,5,6,7]);
+},{}]},{},[2,3,4,5,6,7,8]);

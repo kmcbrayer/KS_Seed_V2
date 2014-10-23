@@ -5,7 +5,6 @@ var lineProps = require("./lineProperties.js");
 module.exports = {
   newLine: function(props){
     var lineProperties = new lineProps;
-    console.log(lineProperties)
     for (var key in lineProperties){
       for (var k in props){
         if (k === key){

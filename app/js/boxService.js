@@ -13,7 +13,7 @@ module.exports = {
       }
     }
     var geometry = new THREE.BoxGeometry(boxProperties.width,boxProperties.height,boxProperties.depth);
-    var material = new THREE.MeshBasicMaterial({
+    var material = new THREE.MeshLambertMaterial({
         'color' : boxProperties.color
       });
     var cube = new THREE.Mesh( geometry, material );

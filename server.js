@@ -11,7 +11,8 @@ require('./lib/config/express')(app);
 var index = require('./lib/controllers');
 
 //routes
-app.get('/*',index.index);
+app.get('/',index.index);
+app.get('/example', index.example);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
