@@ -26,13 +26,10 @@ module.exports = {
 	      function() {
 	        scene.simulate( undefined, 1 );
 	      }
-	    );
-
-	  camera.position.set( 100, 100, -100 );
-	  camera.lookAt( scene.position );//is at (0,0,0) 
+	    ); 
 
 	  //controls
-	  var controls = new THREE.OrbitControls(camera,document.body);
+	  //var controls = new THREE.OrbitControls(camera,document.body);
 
 	  //lights
 	  var ambientLight = new THREE.AmbientLight( 0x101010 );

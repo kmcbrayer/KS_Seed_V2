@@ -27,13 +27,10 @@ module.exports = {
 	      function() {
 	        scene.simulate( undefined, 1 );
 	      }
-	    );
-
-	  camera.position.set( 100, 100, -100 );
-	  camera.lookAt( scene.position );//is at (0,0,0) 
+	    ); 
 
 	  //controls
-	  var controls = new THREE.OrbitControls(camera,document.body);
+	  //var controls = new THREE.OrbitControls(camera,document.body);
 
 	  //lights
 	  var ambientLight = new THREE.AmbientLight( 0x101010 );
@@ -164,6 +161,7 @@ module.exports = {
 var sceneData = require('./scene.js');
 var drawObjs = require('./drawobjs.js');
 var KS = require('./KS.js');
+var thirdPersonControls = require('./thirdPersonControls.js');
 
 sceneData.init = function() {
   
@@ -179,12 +177,36 @@ sceneData.init = function() {
 
   //scene init
   var scene = new Physijs.Scene();
-  var camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 1000 );
+  var camera = new THREE.TargetCamera( 35, window.innerWidth / window.innerHeight, 1, 1000 );
   KS.init(scene,camera);
   //--------PUT OBJS HERE -------------------
 
   KS.ground(); 
-
+  //-------CHARACTRER-----------------------
+  var char_mat = Physijs.createMaterial(
+    new THREE.MeshLambertMaterial,
+    .6,
+    .3
+    );
+  var chara = new Physijs.BoxMesh(
+    new THREE.BoxGeometry(5,5,5),
+    char_mat
+    );
+  chara.position.set(0,5,0);
+  
+  //------TARGET CAMERA---------------
+  camera.addTarget({
+    name: 'myTarget',
+    targetObject: chara,
+    cameraPosition: new THREE.Vector3(0,20,-50),
+    fixed: false,
+    stiffness: 0.1,
+    matchRotation: false
+  });
+  camera.setTarget('myTarget');
+  scene.add(chara);
+  //------THIRD PERSON CONTROLS--------
+  thirdPersonControls(chara);
 
 
   //--------SCENE RENDERING HERE ------------
@@ -192,16 +214,44 @@ sceneData.init = function() {
     scene.add(drawObjs.objs[obj]);
   }
   function render() {
-    requestAnimationFrame( render );
+    scene.simulate();
     renderer.render( scene, camera );
+    requestAnimationFrame( render );
+    camera.update();
   }
   requestAnimationFrame( render );
-  scene.simulate();
 };
 
 window.SCENE = sceneData;
-},{"./KS.js":1,"./drawobjs.js":4,"./scene.js":8}],8:[function(require,module,exports){
+},{"./KS.js":1,"./drawobjs.js":4,"./scene.js":8,"./thirdPersonControls.js":9}],8:[function(require,module,exports){
 'use strict';
  
 module.exports = {VERSION: '0.1'};
-},{}]},{},[2,3,4,5,6,7,8]);
+},{}],9:[function(require,module,exports){
+'use strict';
+
+function moveForward(pl) {
+  //need to find "foward"
+  //then increase velocity in that direction
+}
+
+module.exports = function(pl) {
+  console.log(pl._physijs)
+
+  document.onkeydown = function(e) {
+    console.log(e.keyCode);
+    if(e.keyCode == 87){
+      //move forward
+    }
+    if(e.keyCode == 83){
+      //move backward
+    }
+    if(e.keyCode == 68){
+      //move forward
+    }
+    if(e.keyCode == 65){
+      //move forward
+    }
+  }
+}
+},{}]},{},[1,2,3,4,5,6,7,8]);
