@@ -12,7 +12,7 @@ module.exports = {
 			.3 // low restitution
 		);
 		var ground = new Physijs.BoxMesh(
-			new THREE.BoxGeometry(100, 1, 100),
+			new THREE.BoxGeometry(1000, 1, 1000),
 			ground_material,
 			0 // mass
 		);

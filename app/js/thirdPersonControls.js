@@ -1,26 +1,39 @@
 'use strict';
 
 function moveForward(pl) {
-  //need to find "foward"
-  //then increase velocity in that direction
+  var _vector = new THREE.Vector3(0,0,10);
+  pl.setLinearVelocity(_vector);
+}
+function moveBackward(pl) {
+  var _vector = new THREE.Vector3(0,0,-10);
+  pl.setLinearVelocity(_vector);
+}
+function moveRight(pl) {
+  var _vector = new THREE.Vector3(-10,0,0);
+  pl.setLinearVelocity(_vector);
+}
+function moveLeft(pl) {
+  var _vector = new THREE.Vector3(10,0,0);
+  pl.setLinearVelocity(_vector);
 }
 
 module.exports = function(pl) {
-  console.log(pl._physijs)
-
+  pl.rotation
+  console.log(pl)
   document.onkeydown = function(e) {
-    console.log(e.keyCode);
+    //chrome only keycodes
     if(e.keyCode == 87){
-      //move forward
+      moveForward(pl);
     }
     if(e.keyCode == 83){
-      //move backward
+      moveBackward(pl);
     }
     if(e.keyCode == 68){
-      //move forward
+      moveRight(pl);
     }
     if(e.keyCode == 65){
-      //move forward
+      moveLeft(pl);
     }
   }
+  document.
 }
